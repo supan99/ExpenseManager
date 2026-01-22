@@ -1,97 +1,256 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Expense Manager - React Native App
 
-# Getting Started
+A React Native mobile application built for managing expenses with OCR functionality, lead management, and user authentication.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+1. **Authentication** - Secure login with API-based authentication and token management
+2. **Profile Management** - View and manage user profile information
+3. **Lead Management** - View leads with search, pagination, and filtering
+4. **Expense Management** - Add expenses manually or via OCR receipt scanning
+5. **OCR Receipt Scanning** - Automatic data extraction from receipt images using ML Kit
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Project Structure
 
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+src/
+├── api/                    # API service layer
+│   ├── auth.ts            # Authentication API calls
+│   └── endpoint.ts        # API endpoint definitions
+├── assets/                # Static assets
+│   └── icons/            # SVG icons
+├── components/            # Reusable UI components
+│   ├── BackGroundLayout.tsx
+│   ├── Button.tsx
+│   ├── Input.tsx
+│   ├── icons/            # Icon components
+│   └── image/            # Image/SVG components
+├── enums/                 # Enum definitions
+│   └── keyChainKeys.ts
+├── hooks/                 # Custom React hooks
+│   └── useCameraHooks.tsx
+├── navigation/            # Navigation setup
+│   ├── AppNavigator.tsx
+│   ├── AuthNavigator.tsx
+│   ├── HomeNavigator.tsx
+│   ├── routes.ts
+│   └── types.ts
+├── screens/               # Screen components
+│   ├── AnalyzingReceiptScreen.tsx
+│   ├── ExpenseHomeScreen.tsx
+│   ├── ExpenseScreen.tsx
+│   ├── LeadListScreen.tsx
+│   ├── LoadScreen.tsx
+│   ├── LoginScreen.tsx
+│   ├── ProfileScreen.tsx
+│   └── ScanReceiptScreen.tsx
+├── services/              # Business logic and services
+│   ├── axios.ts          # Axios instance with interceptors
+│   ├── keyChain.ts       # Keychain storage service
+│   ├── navigationHandler.ts  # Navigation utilities
+│   ├── ocr.ts            # OCR processing service
+│   └── storage.ts        # Storage service
+├── store/                 # Redux store
+│   ├── hooks.ts          # Typed Redux hooks
+│   ├── index.ts          # Store configuration
+│   └── slices/
+│       └── authSlice.ts  # Authentication slice
+├── themes/                # Theme configuration
+│   └── index.tsx
+├── types/                 # TypeScript type definitions
+│   ├── index.ts
+│   └── svg.d.ts
+└── utils/                 # Utility functions
+    └── toast.ts
 ```
 
-## Step 2: Build and run your app
+## Architecture
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### State Management
+- **Redux Toolkit** for global state management
+- **React Hooks** for local component state
+- **Secure Storage** using `react-native-keychain` for token persistence
+- **Redux Persistence** via storage service for user data
 
-### Android
+### API Integration
+- Centralized API service using `axios`
+- Automatic token injection via request interceptors
+- Error handling with automatic token refresh on 401 errors
+- Response interceptors for error handling and toast notifications
 
-```sh
-# Using npm
-npm run android
+### Navigation
+- **React Navigation** with Native Stack and Bottom Tabs
+- Nested navigation structure (App → Auth/Home → Tabs)
+- Protected routes based on authentication state
+- Programmatic navigation using navigation ref
 
-# OR using Yarn
-yarn android
+### OCR Functionality
+The app uses **ML Kit OCR** (`react-native-mlkit-ocr`) for text recognition from receipt images. The OCR service:
+
+- Extracts amount, date, merchant name, and category from receipts
+- Handles OCR errors and normalizes text
+- Supports multiple date formats and currency patterns
+- Provides intelligent categorization based on merchant and content
+
+**Key Features:**
+- Real-time camera preview for receipt capture
+- Gallery image selection
+- Progress tracking during OCR processing
+- Automatic form filling with extracted data
+
+## Setup Instructions
+
+### Prerequisites
+- Node.js >= 20
+- React Native development environment set up
+- Android Studio (for Android) or Xcode (for iOS)
+
+### Installation
+
+1. **Install dependencies:**
+```bash
+npm install
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
+2. **iOS Setup (if building for iOS):**
+```bash
+cd ios
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
+cd ..
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+3. **Android Setup:**
+   - Ensure Android SDK is properly configured
+   - Permissions are already configured in `AndroidManifest.xml`:
+     - Camera permission
+     - External storage permission
 
-```sh
-# Using npm
+4. **iOS Setup (Permissions):**
+   - Permissions are already configured in `Info.plist`:
+     - Camera usage description
+     - Photo library usage description
+
+### Running the App
+
+**Start Metro bundler:**
+```bash
+npm start
+```
+
+**Run on Android:**
+```bash
+npm run android
+```
+
+**Run on iOS:**
+```bash
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## API Configuration
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+The app uses a centralized API configuration. Update the base URL in `src/services/axios.ts` if needed.
 
-## Step 3: Modify your app
+### API Endpoints
+- `POST /api/login` - User authentication
+- `GET /api/leads` - Fetch leads with pagination, search, and sorting
 
-Now that you have successfully run the app, let's make changes!
+## Security
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- **Token Storage:** Uses `react-native-keychain` for secure token storage
+- **HTTPS Only:** All API calls use HTTPS
+- **Automatic Token Refresh:** Handles 401 errors and token refresh
+- **Secure Keychain:** Tokens stored in device keychain with proper encryption
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Form Validation
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+The app uses **Formik** and **Yup** for form validation:
+- Login form with email and password validation
+- Expense form with required field validation
+- Real-time validation feedback
+- Error messages displayed below input fields
 
-## Congratulations! :tada:
+## Testing
 
-You've successfully run and modified your React Native App. :partying_face:
+```bash
+npm test
+```
 
-### Now what?
+## Building APK (Android)
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+1. Generate a release keystore (if not exists)
+2. Configure signing in `android/app/build.gradle`
+3. Build release APK:
+```bash
+cd android
+./gradlew assembleRelease
+```
 
-# Troubleshooting
+The APK will be located at: `android/app/build/outputs/apk/release/app-release.apk`
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## Dependencies
 
-# Learn More
+### Core
+- `react-native`: 0.83.1
+- `react`: 19.2.0
+- `@react-navigation/native`: Navigation
+- `@react-navigation/native-stack`: Stack navigation
+- `@react-navigation/bottom-tabs`: Bottom tab navigation
+- `react-native-screens`: Native screen components
+- `react-native-gesture-handler`: Gesture handling
 
-To learn more about React Native, take a look at the following resources:
+### State Management
+- `@reduxjs/toolkit`: Redux Toolkit
+- `react-redux`: React bindings for Redux
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### API & Storage
+- `axios`: HTTP client
+- `react-native-keychain`: Secure storage
+- `qs`: Query string parsing
+
+### Media & OCR
+- `react-native-image-picker`: Image selection
+- `react-native-vision-camera`: Camera functionality
+- `react-native-mlkit-ocr`: ML Kit OCR for text recognition
+- `react-native-permissions`: Runtime permissions
+
+### UI & Styling
+- `react-native-safe-area-context`: Safe area handling
+- `react-native-linear-gradient`: Gradient backgrounds
+- `@react-native-community/blur`: Blur effects
+- `react-native-svg`: SVG support
+- `react-native-svg-transformer`: SVG transformer
+
+### Forms & Validation
+- `formik`: Form management
+- `yup`: Schema validation
+
+## Troubleshooting
+
+### Image Picker Issues
+- Ensure permissions are granted on both platforms
+- For Android, check `AndroidManifest.xml` permissions
+- For iOS, verify `Info.plist` entries
+
+### Camera Issues
+- Ensure camera permissions are granted
+- For Android, verify camera hardware feature in manifest
+- For iOS, check camera usage description in Info.plist
+
+### Navigation Issues
+- Ensure `react-native-screens` and `react-native-gesture-handler` are properly linked
+- Navigation ref must be initialized before use
+
+### Keychain Issues
+- iOS: Ensure Keychain Sharing capability is enabled
+- Android: Should work out of the box
+
+### OCR Issues
+- Ensure ML Kit dependencies are properly installed
+- Check image quality and format
+- Verify camera permissions are granted
+
+## License
+
+This project is for educational/demonstration purposes.
