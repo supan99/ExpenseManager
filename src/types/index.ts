@@ -85,6 +85,7 @@ export interface OCRResult {
   date?: string;
   merchant?: string;
   category?: string;
+  notes?: string;
   success: boolean;
   error?: string;
 }

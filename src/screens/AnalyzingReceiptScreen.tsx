@@ -20,7 +20,10 @@ type Props = NativeStackScreenProps<
   AppRoutes.AnalyzingReceipt
 >;
 
-export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) => {
+export const AnalyzingReceiptScreen: React.FC<Props> = ({
+  navigation,
+  route,
+}) => {
   const { receiptImage } = route.params;
   const [progress, setProgress] = useState(0);
   const [isProcessing, setIsProcessing] = useState(true);
@@ -42,7 +45,7 @@ export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) =
     setProgress(0);
 
     const progressInterval = setInterval(() => {
-      setProgress((prev) => {
+      setProgress(prev => {
         if (prev >= 85) {
           return prev;
         }
@@ -58,18 +61,19 @@ export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) =
       if (!result.success) {
         showToast({
           type: 'error',
-          message: result.error || 'Failed to analyze receipt. Please try again.',
+          message:
+            result.error || 'Failed to analyze receipt. Please try again.',
         });
         navigation.goBack();
         return;
       }
-      
+
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MINIMUM_DURATION - elapsedTime);
 
       if (remainingTime > 0) {
         const waitInterval = setInterval(() => {
-          setProgress((prev) => {
+          setProgress(prev => {
             if (prev >= 95) {
               return prev;
             }
@@ -77,14 +81,16 @@ export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) =
           });
         }, remainingTime / 10);
 
-        await new Promise<void>((resolve) => setTimeout(() => resolve(), remainingTime));
+        await new Promise<void>(resolve =>
+          setTimeout(() => resolve(), remainingTime),
+        );
         clearInterval(waitInterval);
       }
 
       clearInterval(progressInterval);
       setProgress(100);
 
-      await new Promise<void>((resolve) => setTimeout(() => resolve(), 300));
+      await new Promise<void>(resolve => setTimeout(() => resolve(), 300));
 
       setIsProcessing(false);
 
@@ -95,16 +101,18 @@ export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) =
     } catch (error) {
       clearInterval(progressInterval);
       console.error('OCR Processing Error:', error);
-      
+
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, MINIMUM_DURATION - elapsedTime);
-      
+
       if (remainingTime > 0) {
-        await new Promise<void>((resolve) => setTimeout(() => resolve(), remainingTime));
+        await new Promise<void>(resolve =>
+          setTimeout(() => resolve(), remainingTime),
+        );
       }
-      
+
       setProgress(100);
-      
+
       showToast({
         type: 'error',
         message: 'Failed to analyze receipt. Please try again.',
@@ -133,7 +141,8 @@ export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) =
         <Pressable
           style={styles.cancelButton}
           onPress={handleCancel}
-          accessibilityLabel="Cancel">
+          accessibilityLabel="Cancel"
+        >
           <Text style={styles.cancelButtonText}>Cancel</Text>
         </Pressable>
       </View>
@@ -147,10 +156,6 @@ export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) =
                 style={styles.receiptImage}
                 resizeMode="contain"
               />
-              <View style={styles.magnifyingGlass}>
-                <View style={styles.magnifyingGlassLens} />
-                <View style={styles.magnifyingGlassHandle} />
-              </View>
             </View>
           ) : (
             <View style={styles.placeholderContainer}>
@@ -162,18 +167,13 @@ export const AnalyzingReceiptScreen: React.FC<Props> = ({ navigation, route }) =
         <View style={styles.textContainer}>
           <Text style={styles.analyzingTitle}>Analyzing Receipt...</Text>
           <Text style={styles.analyzingDescription}>
-            Our System is working its best to fetch your details from the receipt. This should only
-            take a moment!
+            Our System is working its best to fetch your details from the
+            receipt. This should only take a moment!
           </Text>
         </View>
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
-            <View
-              style={[
-                styles.progressFill,
-                { width: `${progress}%` },
-              ]}
-            />
+            <View style={[styles.progressFill, { width: `${progress}%` }]} />
           </View>
         </View>
       </View>
@@ -229,38 +229,6 @@ const styles = StyleSheet.create({
   receiptImage: {
     width: '100%',
     height: '100%',
-  },
-  magnifyingGlass: {
-    position: 'absolute',
-    bottom: '20%',
-    right: '15%',
-    width: 80,
-    height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  magnifyingGlassLens: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 3,
-    borderColor: '#000',
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  magnifyingGlassHandle: {
-    position: 'absolute',
-    bottom: -15,
-    right: -15,
-    width: 20,
-    height: 30,
-    backgroundColor: '#000',
-    borderRadius: 10,
-    transform: [{ rotate: '45deg' }],
   },
   placeholderContainer: {
     width: '100%',

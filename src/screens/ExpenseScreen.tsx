@@ -71,6 +71,7 @@ export const ExpenseScreen: React.FC<Props> = ({ navigation, route }) => {
         date: ocrResultFromRoute.date || '',
         title: ocrResultFromRoute.merchant || '',
         category: ocrResultFromRoute.category || '',
+        notes: ocrResultFromRoute.notes || '',
       };
     }
 
