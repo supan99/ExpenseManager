@@ -9,7 +9,7 @@ import { navigateToAuth, navigateToRestricted } from './navigationHandler';
 import { showToast } from '../utils/toast';
 import { KeyChainKeys } from '../enums/keyChainKeys';
 
-const API_URL = 'https://api-invesqcrm.rundfunkbeitragservice.com';
+const API_URL = process.env.API_URL ?? '';
 
 const client = axios.create({
   baseURL: API_URL,
@@ -60,7 +60,7 @@ client.interceptors.response.use(
           await deleteKeyChain('refreshToken');
           return Promise.reject(error);
         } else {
-          const res = await axios.post(`${API_URL}/api/refreshToken`, {
+          const res = await axios.post(`${process.env.API_URL}/api/refreshToken`, {
             refreshToken,
           });
           const { data } = res;
