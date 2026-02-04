@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Input } from '../components/Input';
+import TextField from '../components/textInput/TextField';
 import { Button } from '../components/Button';
-import {authApi} from '../api/auth';
+import { authApi } from '../api/auth';
 import { useAppDispatch } from '../store/hooks';
 import { login } from '../store/slices/authSlice';
 import { navigateToHome } from '../services/navigationHandler';
@@ -53,7 +53,6 @@ export const LoginScreen: React.FC = () => {
         password: values.password,
       });
 
-
       console.log('Login response', response);
 
       if (response?.data) {
@@ -77,7 +76,9 @@ export const LoginScreen: React.FC = () => {
     } catch (error: any) {
       Alert.alert(
         'Login Failed',
-        error.message || error.response?.data?.message || 'Invalid email or password',
+        error.message ||
+          error.response?.data?.message ||
+          'Invalid email or password',
       );
     } finally {
       setLoading(false);
@@ -88,10 +89,12 @@ export const LoginScreen: React.FC = () => {
     <BackGroundLayout containerStyle={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}>
+        style={styles.keyboardView}
+      >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled">
+          keyboardShouldPersistTaps="handled"
+        >
           <View style={styles.content}>
             <Text style={styles.title}>Welcome Back</Text>
             <Text style={styles.subtitle}>Sign in to continue</Text>
@@ -101,7 +104,8 @@ export const LoginScreen: React.FC = () => {
               validationSchema={loginValidationSchema}
               onSubmit={handleLogin}
               validateOnChange={true}
-              validateOnBlur={true}>
+              validateOnBlur={true}
+            >
               {({
                 handleChange,
                 handleBlur,
@@ -111,7 +115,7 @@ export const LoginScreen: React.FC = () => {
                 touched,
               }) => (
                 <View style={styles.form}>
-                  <Input
+                  {/* <TextField
                     label="Email"
                     placeholder="Enter your email"
                     value={values.email}
@@ -120,11 +124,13 @@ export const LoginScreen: React.FC = () => {
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    error={touched.email && errors.email ? errors.email : undefined}
+                    error={
+                      touched.email && errors.email ? errors.email : undefined
+                    }
                     editable={!loading}
-                  />
+                  /> */}
 
-                  <Input
+                  {/* <TextField
                     label="Password"
                     placeholder="Enter your password"
                     value={values.password}
@@ -138,7 +144,7 @@ export const LoginScreen: React.FC = () => {
                         : undefined
                     }
                     editable={!loading}
-                  />
+                  /> */}
 
                   <Button
                     title="Login"

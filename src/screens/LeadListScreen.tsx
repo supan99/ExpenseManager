@@ -8,7 +8,7 @@ import {
   RefreshControl,
   Image,
 } from 'react-native';
-import { Input } from '../components/Input';
+import { Input } from '../components/textInput/TextField';
 import { Lead } from '../types';
 import {leadApi} from '../api/auth';
 import { theme } from '../themes';
