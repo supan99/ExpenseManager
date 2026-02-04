@@ -1,7 +1,8 @@
 import React from 'react';
-import UserIconSvg from '../../assets/icons/userICON.svg';
-import UserGroupIconSvg from '../../assets/icons/userGroup.svg';
-import BackButtonIconSvg from '../../assets/icons/arrowLeft.svg';
+import UserIconSvg from '@assets/icons/userICON.svg';
+import UserGroupIconSvg from '@assets/icons/userGroup.svg';
+import BackButtonIconSvg from '@assets/icons/arrowLeft.svg';
+import AppLogoIconSvg from '@assets/icons/AppLogo.svg';
 
 interface IconProps {
   width?: number;
@@ -14,13 +15,7 @@ export const UserIcon: React.FC<IconProps> = ({
   height = 24,
   color = '#FFFFFF',
 }) => {
-  return (
-    <UserIconSvg
-      width={width}
-      height={height}
-      color={color}
-    />
-  );
+  return <UserIconSvg width={width} height={height} color={color} />;
 };
 
 export const UserGroupIcon: React.FC<IconProps> = ({
@@ -28,26 +23,20 @@ export const UserGroupIcon: React.FC<IconProps> = ({
   height = 24,
   color = '#FFFFFF',
 }) => {
-  return (
-    <UserGroupIconSvg
-      width={width}
-      height={height}
-      color={color}
-    />
-  );
+  return <UserGroupIconSvg width={width} height={height} color={color} />;
 };
-
 
 export const BackButtonIcon: React.FC<IconProps> = ({
   width = 24,
   height = 24,
   color = '#FFFFFF',
 }) => {
-  return (
-    <BackButtonIconSvg
-      width={width}
-      height={height}
-      color={color}
-    />
-  );
+  return <BackButtonIconSvg width={width} height={height} color={color} />;
+};
+
+export const AppLogoIcon: React.FC<IconProps> = ({
+  width = 200,
+  height = 200,
+}) => {
+  return <AppLogoIconSvg width={width} height={height} />;
 };

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Input } from '../components/Input';
+import { Input } from '../components/textInput/TextField';
 import { Button } from '../components/Button';
 import BackGroundLayout from '../components/BackGroundLayout';
 import { theme } from '../themes';

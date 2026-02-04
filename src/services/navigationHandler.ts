@@ -1,15 +1,25 @@
 import { createNavigationContainerRef } from '@react-navigation/native';
-import type { AppStackParamList } from '../navigation/types';
-import { AppRoutes } from '../navigation/routes';
+import type { AppStackParamList } from '@navigation/types';
+import { AppRoutes, AuthRoutes } from '@navigation/routes';
 
-export const navigationRef =
-  createNavigationContainerRef<AppStackParamList>();
+export const navigationRef = createNavigationContainerRef<AppStackParamList>();
 
-export const navigateToAuth = (): void => {
-  navigationRef.reset({
-    index: 0,
-    routes: [{ name: AppRoutes.Auth }],
-  });
+export const navigateToAuth = (
+  screenName: AuthRoutes = AuthRoutes.Welcome,
+): void => {
+  if (navigationRef.isReady()) {
+    navigationRef.reset({
+      index: 0,
+      routes: [
+        {
+          name: AppRoutes.Auth,
+          params: {
+            screen: screenName,
+          },
+        },
+      ],
+    });
+  }
 };
 
 export const navigateToHome = (): void => {

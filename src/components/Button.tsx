@@ -47,14 +47,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.blue,
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.l,
-    borderRadius: 8,
+    borderRadius: theme.spacing.s,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 48,
   },
   buttonDisabled: {
-    backgroundColor: theme.colors.gray,
-    opacity: 0.6,
+    backgroundColor: theme.colors.white80,
+    opacity: 0.5,
   },
   buttonText: {
     color: theme.text.colors.primary,
